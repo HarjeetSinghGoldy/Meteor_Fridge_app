@@ -1,13 +1,14 @@
-Products = new Mongo.Collection('products');
-
 if (Meteor.isClient) {
   Template.fridge.onRendered(function () {
+//      every template has its own instance
     var templateInstance = this;
 
+//restrict the DOM to id of fridge for prevent being slow and more managable
     templateInstance.$('#fridge').droppable({
       drop: function (evt, ui) {
         var query = {
-          _id: ui.draggable.data('id')
+//            Get the draggable img id using jquery ui data attributes
+          _id: ui.draggable.data('id') // Insted of $(ui.draggable).attr('data-id')  jQ 1.4.3
         };
         var changes = {
           $set: {
@@ -65,33 +66,3 @@ if (Meteor.isClient) {
 
 }
 
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    Products.remove({});
-
-    // fill the database with some products
-    Products.insert({
-      name: 'Milk',
-      img: '/milk.png',
-      place: 'fridge'
-    });
-
-    Products.insert({
-      name: 'Juice',
-      img: '/juice.png',
-      place: 'fridge'
-    });
-
-    Products.insert({
-      name: 'Bread',
-      img: '/bread.png',
-      place: 'supermarket'
-    });
-
-    Products.insert({
-      name: 'Banana',
-      img: '/banana.png',
-      place: 'supermarket'
-    });
-  });
-}
